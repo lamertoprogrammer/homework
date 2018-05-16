@@ -260,8 +260,7 @@ WHERE OBJECT_TYPE_ID = 2;
 SELECT OBJECT_TYPE_ID AS OT_ID, NAME AS OT_NAME, LEVEL
 FROM OBJECT_TYPES
 START WITH OBJECT_TYPE_ID = 3
-CONNECT BY PRIOR PARENT_ID = OBJECT_TYPE_ID
-ORDER BY LEVEL DESC;
+CONNECT BY PRIOR PARENT_ID = OBJECT_TYPE_ID;
 
 --4. Получение вложенности объектов для заданного 
 --объекта(нужно получить иерархию вложенности)(obj_id, obj_name, level)
@@ -282,7 +281,7 @@ WHERE OBJECT_TYPE_ID IN (
 
 --6. Получение значений всех атрибутов(всех возможных типов) для 
 --заданного объекта(без учета наследования ОТ)(attr_id, attr_name, value)
-SELECT PARAMS.ATTR_ID, ATTRIBUTES.NAME AS ATTR_NAME, PARAMS.VALUE
+SELECT ATTRIBUTES.ATTR_ID, ATTRIBUTES.NAME AS ATTR_NAME, PARAMS.VALUE
 FROM ATTRIBUTES
 LEFT JOIN PARAMS
 ON ATTRIBUTES.ATTR_ID = PARAMS.ATTR_ID
