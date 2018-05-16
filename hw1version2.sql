@@ -281,13 +281,15 @@ WHERE OBJECT_TYPE_ID IN (
 
 --6. Получение значений всех атрибутов(всех возможных типов) для 
 --заданного объекта(без учета наследования ОТ)(attr_id, attr_name, value)
-SELECT ATTRIBUTES.ATTR_ID, ATTRIBUTES.NAME AS ATTR_NAME, PARAMS.VALUE
+CREATE VIEW VALUE AS
+SELECT ATTRIBUTES.ATTR_ID, ATTRIBUTES.NAME AS ATTR_NAME, PARAMS.VALUE as VALUE,DATE_VALUE, REFERENCE AS REF_VALUE
 FROM ATTRIBUTES
 LEFT JOIN PARAMS
 ON ATTRIBUTES.ATTR_ID = PARAMS.ATTR_ID
 LEFT JOIN REFERENCES
 ON REFERENCES.ATTR_ID = ATTRIBUTES.ATTR_ID
 WHERE REFERENCES.OBJECT_ID= 3 OR PARAMS.OBJECT_ID = 3;
+SELECT * FROM VALUE;
  
 --7. Получение ссылок 
 --на заданный объект(все объекты, которые ссылаются на текущий)(ref_id, ref_name)
@@ -298,7 +300,7 @@ WHERE OBJECT_ID = 3;
 
 --8. Получение значений всех атрибутов(всех возможных типов, без повторяющихся атрибутов) 
 --для заданного объекта( с учетом наследования ОТ) Вывести в виде см. п.6
-SELECT DISTINCT ATTR_ID, ATTRIBUTES.NAME AS ATTR_NAME, VALUE FROM (
+SELECT DISTINCT ATTR_ID, ATTRIBUTES.NAME AS ATTR_NAME, VALUE, DATE_VALUE, REFERENCE AS REF_VALUE FROM (
     SELECT * FROM (
         SELECT ATTR_ID
         FROM OBJECTS
